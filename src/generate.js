@@ -95,7 +95,7 @@ export const defaultSelectorHandlers /* : SelectorHandler[] */ = [
  * Generate CSS for a selector and some styles.
  *
  * This function handles the media queries and pseudo selectors that can be used
- * in aphrodite styles.
+ * in afrododi styles.
  *
  * @param {string} selector: A base CSS selector for the styles to be generated
  *     with.

@@ -1,7 +1,7 @@
 {
-  "name": "aphrodite",
+  "name": "afrododi",
   "version": "2.2.3",
-  "description": "Framework-agnostic CSS-in-JS with support for server-side rendering, browser prefixing, and minimum CSS generation",
+  "description": "Framework-agnostic async-compatible CSS-in-JS with support for server-side rendering, browser prefixing, and minimum CSS generation",
   "keywords": [
     "css",
     "react",
@@ -32,14 +32,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Khan/aphrodite.git"
+    "url": "https://github.com/communityfunded/afrododi.git"
   },
   "author": "Jamie Wong",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Khan/aphrodite/issues"
+    "url": "https://github.com/communityfunded/afrododi/issues"
   },
-  "homepage": "https://github.com/Khan/aphrodite",
+  "homepage": "https://github.com/communityfunded/afrododi",
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",

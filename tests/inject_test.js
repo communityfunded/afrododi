@@ -176,7 +176,7 @@ describe('injection', () => {
         // browser-specific tests
         it('adds to .innerText if insertRule is not available', done => {
             const styleTag = global.document.createElement("style");
-            styleTag.setAttribute("data-aphrodite", "");
+            styleTag.setAttribute("data-afrododi", "");
             document.head.appendChild(styleTag);
             styleTag.sheet.insertRule = null;
 

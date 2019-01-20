@@ -62,7 +62,7 @@ const StyleSheet = {
 };
 
 /**
- * Utilities for using Aphrodite server-side.
+ * Utilities for using afrododi server-side.
  *
  * This can be minified out in client-only bundles by replacing `typeof window`
  * with `"object"`, e.g. via Webpack's DefinePlugin:
@@ -88,10 +88,18 @@ const StyleSheetServer = typeof window !== 'undefined'
                 },
             };
         },
+        flushBuffer() {
+            const cssContent = flushToString();
+            reset();
+
+            return cssContent;
+        },
+        startBuffering,
+        getRenderedClassNames,
     };
 
 /**
- * Utilities for using Aphrodite in tests.
+ * Utilities for using afrododi in tests.
  *
  * Not meant to be used in production.
  */
@@ -102,8 +110,8 @@ const StyleSheetTestUtils = process.env.NODE_ENV === 'production'
         * Prevent styles from being injected into the DOM.
         *
         * This is useful in situations where you'd like to test rendering UI
-        * components which use Aphrodite without any of the side-effects of
-        * Aphrodite happening. Particularly useful for testing the output of
+        * components which use afrododi without any of the side-effects of
+        * afrododi happening. Particularly useful for testing the output of
         * components when you have no DOM, e.g. testing in Node without a fake DOM.
         *
         * Should be paired with a subsequent call to
@@ -132,7 +140,7 @@ const StyleSheetTestUtils = process.env.NODE_ENV === 'production'
     };
 
 /**
- * Generate the Aphrodite API exports, with given `selectorHandlers` and
+ * Generate the afrododi API exports, with given `selectorHandlers` and
  * `useImportant` state.
  */
 export default function makeExports(
@@ -144,12 +152,12 @@ export default function makeExports(
             ...StyleSheet,
 
             /**
-             * Returns a version of the exports of Aphrodite (i.e. an object
+             * Returns a version of the exports of afrododi (i.e. an object
              * with `css` and `StyleSheet` properties) which have some
              * extensions included.
              *
              * @param {Array.<Object>} extensions: An array of extensions to
-             *     add to this instance of Aphrodite. Each object should have a
+             *     add to this instance of afrododi. Each object should have a
              *     single property on it, defining which kind of extension to
              *     add.
              * @param {SelectorHandler} [extensions[].selectorHandler]: A
@@ -157,7 +165,7 @@ export default function makeExports(
              *     generate.js.
              *
              * @returns {Object} An object containing the exports of the new
-             *     instance of Aphrodite.
+             *     instance of afrododi.
              */
             extend(extensions /* : Extension[] */) {
                 const extensionSelectorHandlers = extensions

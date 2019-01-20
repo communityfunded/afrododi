@@ -14,7 +14,7 @@ function distBuild(options) {
         output: {
             file: `dist/${options.filename}`,
             format: options.format,
-            name: 'aphrodite',
+            name: 'afrododi',
             sourcemap: options.sourcemap,
         },
         plugins: [
@@ -61,8 +61,8 @@ function standardBuilds() {
 }
 
 export default [
-    distBuild({ filename: 'aphrodite.umd.js', format: 'umd', sourcemap: true, minify: false }),
-    distBuild({ filename: 'aphrodite.umd.min.js', format: 'umd', sourcemap: true, minify: true }),
-    distBuild({ filename: 'aphrodite.js', format: 'cjs', sourcemap: false, minify: false }),
+    distBuild({ filename: 'afrododi.umd.js', format: 'umd', sourcemap: true, minify: false }),
+    distBuild({ filename: 'afrododi.umd.min.js', format: 'umd', sourcemap: true, minify: true }),
+    distBuild({ filename: 'afrododi.js', format: 'cjs', sourcemap: false, minify: false }),
     standardBuilds(),
 ];

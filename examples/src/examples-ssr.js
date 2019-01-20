@@ -14,7 +14,7 @@ export default function() {
         <html>
             <head>
                 <meta charset="utf-8">
-                <style data-aphrodite>${data.css.content}</style>
+                <style data-afrododi>${data.css.content}</style>
             </head>
             <body>
                 <div id="root">${data.html}</div>

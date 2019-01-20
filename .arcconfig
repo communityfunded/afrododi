@@ -1,5 +1,5 @@
 {
-    "project_id": "aphrodite",
+    "project_id": "afrododi",
     "conduit_url": "https://phabricator.khanacademy.org/",
     "lint.engine": "ArcanistConfigurationDrivenLintEngine"
 }

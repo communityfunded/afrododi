@@ -15,7 +15,7 @@ export {
 };
 
 /**
- * Aphrodite style declaration
+ * afrododi style declaration
  */
 export type StyleDeclarationMap = Map<keyof CSSProperties, string | number>;
 export type StyleDeclaration<T = {}> = {
@@ -38,7 +38,7 @@ export interface StyleSheetStatic {
      * Rehydrate class names from server renderer
      */
     rehydrate(renderedClassNames: string[]): void;
-    
+
     extend(extensions: Extension[]): Exports;
 }
 
@@ -51,7 +51,7 @@ type CSSInputTypes = StyleDeclarationValue | false | null | void;
 export function css(...styles: CSSInputTypes[]): string;
 
 /**
- *  Override Aphrodite minifying styles to hashes in production
+ *  Override afrododi minifying styles to hashes in production
  */
 export function minify(shouldMinify: boolean): void;
 
@@ -64,10 +64,13 @@ interface StaticRendererResult {
 }
 
 /**
- * Utilities for using Aphrodite server-side.
+ * Utilities for using afrododi server-side.
  */
 interface StyleSheetServerStatic {
     renderStatic(renderFunc: () => string): StaticRendererResult;
+    startBuffering(): void;
+    flushBuffer(): string;
+    getRenderedClassNames(): string[];
 }
 
 export var StyleSheetServer: StyleSheetServerStatic;
@@ -77,8 +80,8 @@ interface StyleSheetTestUtilsStatic {
      * Prevent styles from being injected into the DOM.
      *
      * This is useful in situations where you'd like to test rendering UI
-     * components which use Aphrodite without any of the side-effects of
-     * Aphrodite happening. Particularly useful for testing the output of
+     * components which use afrododi without any of the side-effects of
+     * afrododi happening. Particularly useful for testing the output of
      * components when you have no DOM, e.g. testing in Node without a fake DOM.
      *
      * Should be paired with a subsequent call to

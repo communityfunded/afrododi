@@ -2,7 +2,7 @@ import makeExports from './exports';
 
 const useImportant = true; // Add !important to all style definitions
 
-const Aphrodite = makeExports(useImportant);
+const afrododi = makeExports(useImportant);
 
 const {
     StyleSheet,
@@ -13,7 +13,7 @@ const {
     flushToStyleTag,
     injectAndGetClassName,
     defaultSelectorHandlers,
-} = Aphrodite;
+} = afrododi;
 
 export {
     StyleSheet,

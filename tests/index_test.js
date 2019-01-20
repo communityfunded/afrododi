@@ -116,9 +116,9 @@ describe('css', () => {
         });
     });
 
-    it('automatically uses a style tag with the data-aphrodite attribute', done => {
+    it('automatically uses a style tag with the data-afrododi attribute', done => {
         const style = document.createElement("style");
-        style.setAttribute("data-aphrodite", "");
+        style.setAttribute("data-afrododi", "");
         document.head.appendChild(style);
 
         const sheet = StyleSheet.create({
@@ -369,10 +369,10 @@ describe('StyleSheet.extend', () => {
     });
 
     it('accepts empty extensions', () => {
-        const newAphrodite = StyleSheet.extend([]);
+        const newafrododi = StyleSheet.extend([]);
 
-        assert(newAphrodite.css);
-        assert(newAphrodite.StyleSheet);
+        assert(newafrododi.css);
+        assert(newafrododi.StyleSheet);
     });
 
     it('uses a new selector handler', done => {

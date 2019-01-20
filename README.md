@@ -1,4 +1,4 @@
-# Aphrodite [![npm version](https://badge.fury.io/js/aphrodite.svg)](https://badge.fury.io/js/aphrodite) [![Build Status](https://travis-ci.org/Khan/aphrodite.svg?branch=master)](https://travis-ci.org/Khan/aphrodite) [![Coverage Status](https://coveralls.io/repos/github/Khan/aphrodite/badge.svg?branch=master)](https://coveralls.io/github/Khan/aphrodite?branch=master) [![Gitter chat](https://img.shields.io/gitter/room/Khan/aphrodite.svg)](https://gitter.im/Khan/aphrodite) [![gzip size][gzip-badge]][unpkg-dist] [![size][size-badge]][unpkg-dist]
+# afrododi [![npm version](https://badge.fury.io/js/afrododi.svg)](https://badge.fury.io/js/afrododi) [![Build Status](https://travis-ci.org/communityfunded/afrododi.svg?branch=master)](https://travis-ci.org/communityfunded/afrododi) [![Coverage Status](https://coveralls.io/repos/github/communityfunded/afrododi/badge.svg?branch=master)](https://coveralls.io/github/communityfunded/afrododi?branch=master) [![Gitter chat](https://img.shields.io/gitter/room/communityfunded/afrododi.svg)](https://gitter.im/communityfunded/afrododi) [![gzip size][gzip-badge]][unpkg-dist] [![size][size-badge]][unpkg-dist]
 
 _Framework-agnostic CSS-in-JS with support for server-side rendering, browser prefixing, and minimum CSS generation._
 
@@ -19,10 +19,10 @@ Support for colocating your styles with your JavaScript component.
 
 # Installation
 
-Aphrodite is distributed via [npm](https://www.npmjs.com/):
+afrododi is distributed via [npm](https://www.npmjs.com/):
 
 ```
-npm install --save aphrodite
+npm install --save afrododi
 ```
 
 # API
@@ -31,7 +31,7 @@ If you'd rather watch introductory videos, you can find them [here](https://www.
 
 ```jsx
 import React, { Component } from 'react';
-import { StyleSheet, css } from 'aphrodite';
+import { StyleSheet, css } from 'afrododi';
 
 class App extends Component {
     render() {
@@ -134,16 +134,16 @@ const styles = StyleSheet.create({
 
 To perform server-side rendering, make a call to `StyleSheetServer.renderStatic`, which takes a callback. Do your rendering inside of the callback and return the generated HTML. All of the calls to `css()` inside of the callback will be collected and the generated css as well as the generated HTML will be returned.
 
-Rehydrating lets Aphrodite know which styles have already been inserted into the page. If you don't rehydrate, Aphrodite might add duplicate styles to the page.
+Rehydrating lets afrododi know which styles have already been inserted into the page. If you don't rehydrate, afrododi might add duplicate styles to the page.
 
 To perform rehydration, call `StyleSheet.rehydrate` with the list of generated class names returned to you by `StyleSheetServer.renderStatic`.
 
-Note: If you are using `aphrodite/no-inportant` in your project and you want to render it on server side, be sure to import `StyleSheetServer` from `aphrodite/no-inportant` otherwise you are going to get an error.
+Note: If you are using `afrododi/no-inportant` in your project and you want to render it on server side, be sure to import `StyleSheetServer` from `afrododi/no-inportant` otherwise you are going to get an error.
 
 As an example:
 
 ```js
-import { StyleSheetServer } from 'aphrodite';
+import { StyleSheetServer } from 'afrododi';
 
 // Contains the generated html, as well as the generated css and some
 // rehydration data.
@@ -156,7 +156,7 @@ var {html, css} = StyleSheetServer.renderStatic(() => {
 return `
     <html>
         <head>
-            <style data-aphrodite>${css.content}</style>
+            <style data-afrododi>${css.content}</style>
         </head>
         <body>
             <div id='root'>${html}</div>
@@ -172,25 +172,25 @@ return `
 
 ## Disabling `!important`
 
-By default, Aphrodite will append `!important` to style definitions. This is
+By default, afrododi will append `!important` to style definitions. This is
 intended to make integrating with a pre-existing codebase easier. If you'd like
-to avoid this behaviour, then instead of importing `aphrodite`, import
-`aphrodite/no-important`. Otherwise, usage is the same:
+to avoid this behaviour, then instead of importing `afrododi`, import
+`afrododi/no-important`. Otherwise, usage is the same:
 
 ```js
-import { StyleSheet, css } from 'aphrodite/no-important';
+import { StyleSheet, css } from 'afrododi/no-important';
 ```
 
 ## Minifying style names
 
-By default, Aphrodite will minify style names down to their hashes in production
+By default, afrododi will minify style names down to their hashes in production
 (`process.env.NODE_ENV === 'production'`). You can override this behavior by
 calling `minify` with `true` or `false` before calling `StyleSheet.create`.
 
 This is useful if you want to facilitate debugging in production for example.
 
 ```js
-import { StyleSheet, minify } from 'aphrodite';
+import { StyleSheet, minify } from 'afrododi';
 
 // Always keep the full style names
 minify(false);
@@ -200,7 +200,7 @@ minify(false);
 
 ## Font Faces
 
-Creating custom font faces is a special case. Typically you need to define a global `@font-face` rule. In the case of Aphrodite we only want to insert that rule if it's actually being referenced by a class that's in the page. We've made it so that the `fontFamily` property can accept a font-face object (either directly or inside an array). A global `@font-face` rule is then generated based on the font definition.
+Creating custom font faces is a special case. Typically you need to define a global `@font-face` rule. In the case of afrododi we only want to insert that rule if it's actually being referenced by a class that's in the page. We've made it so that the `fontFamily` property can accept a font-face object (either directly or inside an array). A global `@font-face` rule is then generated based on the font definition.
 
 ```js
 const coolFont = {
@@ -222,11 +222,11 @@ const styles = StyleSheet.create({
 });
 ```
 
-Aphrodite will ensure that the global `@font-face` rule for this font is only inserted once, no matter how many times it's referenced.
+afrododi will ensure that the global `@font-face` rule for this font is only inserted once, no matter how many times it's referenced.
 
 ## Animations
 
-Similar to [Font Faces](#font-faces), Aphrodite supports keyframe animations, but it's treated as a special case. Once we find an instance of the animation being referenced, a global `@keyframes` rule is created and appended to the page.
+Similar to [Font Faces](#font-faces), afrododi supports keyframe animations, but it's treated as a special case. Once we find an instance of the animation being referenced, a global `@keyframes` rule is created and appended to the page.
 
 Animations are provided as objects describing the animation, in typical `@keyframes` fashion. Using the `animationName` property, you can supply a single animation object, or an array of animation objects. Other animation properties like `animationDuration` can be provided as strings.
 
@@ -264,15 +264,15 @@ const styles = StyleSheet.create({
 });
 ```
 
-Aphrodite will ensure that `@keyframes` rules are never duplicated, no matter how many times a given rule is referenced.
+afrododi will ensure that `@keyframes` rules are never duplicated, no matter how many times a given rule is referenced.
 
 # Use without React
 
-Aphrodite was built with React in mind but does not depend on React. Here, you can see it
+afrododi was built with React in mind but does not depend on React. Here, you can see it
 used with [Web Components][webcomponents]:
 
 ```js
-import { StyleSheet, css } from 'aphrodite';
+import { StyleSheet, css } from 'afrododi';
 
 const styles = StyleSheet.create({
     red: {
@@ -297,14 +297,14 @@ document.registerElement('my-app', App);
 
 ## Style injection and buffering
 
-Aphrodite will automatically attempt to create a `<style>` tag in the document's `<head>` element to put its generated styles in. Aphrodite will only generate one `<style>` tag and will add new styles to this over time. If you want to control which style tag Aphrodite uses, create a style tag yourself with the `data-aphrodite` attribute and Aphrodite will use that instead of creating one for you.
+afrododi will automatically attempt to create a `<style>` tag in the document's `<head>` element to put its generated styles in. afrododi will only generate one `<style>` tag and will add new styles to this over time. If you want to control which style tag afrododi uses, create a style tag yourself with the `data-afrododi` attribute and afrododi will use that instead of creating one for you.
 
-To speed up injection of styles, Aphrodite will automatically try to buffer writes to this `<style>` tag so that minimum number of DOM modifications happen.
+To speed up injection of styles, afrododi will automatically try to buffer writes to this `<style>` tag so that minimum number of DOM modifications happen.
 
-Aphrodite uses [asap](https://github.com/kriskowal/asap) to schedule buffer flushing. If you measure DOM elements' dimensions in `componentDidMount` or `componentDidUpdate`, you can use `setTimeout` or `flushToStyleTag` to ensure all styles are injected.
+afrododi uses [asap](https://github.com/kriskowal/asap) to schedule buffer flushing. If you measure DOM elements' dimensions in `componentDidMount` or `componentDidUpdate`, you can use `setTimeout` or `flushToStyleTag` to ensure all styles are injected.
 
 ```js
-import { StyleSheet, css } from 'aphrodite';
+import { StyleSheet, css } from 'afrododi';
 
 class Component extends React.Component {
     render() {
@@ -331,7 +331,7 @@ const styles = StyleSheet.create({
 ## Assigning a string to a content property for a pseudo-element
 
 When assigning a string to the `content` property it requires double or single quotes in CSS.
-Therefore with Aphrodite you also have to provide the quotes within the value string for `content` to match how it will be represented in CSS.
+Therefore with afrododi you also have to provide the quotes within the value string for `content` to match how it will be represented in CSS.
 
 As an example:
 
@@ -339,13 +339,13 @@ As an example:
 const styles = StyleSheet.create({
   large: {
       ':after': {
-        content: '"Aphrodite"',
+        content: '"afrododi"',
       },
     },
   },
   small: {
       ':before': {
-        content: "'Aphrodite'",
+        content: "'afrododi'",
       },
     },
   });
@@ -354,17 +354,17 @@ The generated css will be:
 
 ```css
   .large_im3wl1:after {
-      content: "Aphrodite" !important;
+      content: "afrododi" !important;
   }
 
   .small_ffd5jf:before {
-      content: 'Aphrodite' !important;
+      content: 'afrododi' !important;
   }
 ```
 
 ## Overriding styles
 
-When combining multiple aphrodite styles, you are strongly recommended to merge all of your styles into a single call to `css()`, and should not combine the generated class names that aphrodite outputs (via string concatenation, `classnames`, etc.).
+When combining multiple afrododi styles, you are strongly recommended to merge all of your styles into a single call to `css()`, and should not combine the generated class names that afrododi outputs (via string concatenation, `classnames`, etc.).
 For example, if you have a base style of `foo` which you are trying to override with `bar`:
 
 ### Do this:
@@ -440,7 +440,7 @@ then you will get the appropriate effect of the `bar` styles overriding the `foo
 }
 ```
 
-then we end up with the opposite effect, with `foo` overriding `bar`! The way to solve this is to pass both of the styles into aphrodite's `css()` call. Then, it will produce a single class name, like `foo_im3wl1-o_O-bar_hxfs3d`, with the correctly overridden styles, thus solving the problem:
+then we end up with the opposite effect, with `foo` overriding `bar`! The way to solve this is to pass both of the styles into afrododi's `css()` call. Then, it will produce a single class name, like `foo_im3wl1-o_O-bar_hxfs3d`, with the correctly overridden styles, thus solving the problem:
 
 ```css
 .foo_im3wl1-o_O-bar_hxfs3d {
@@ -450,7 +450,7 @@ then we end up with the opposite effect, with `foo` overriding `bar`! The way to
 
 ## Object key ordering
 
-When styles are specified in Aphrodite, the order that they appear in the
+When styles are specified in afrododi, the order that they appear in the
 actual stylesheet depends on the order that keys are retrieved from the
 objects. This ordering is determined by the JavaScript engine that is being
 used to render the styles. Sometimes, the order that the styles appear in the
@@ -508,7 +508,7 @@ the order that they appear in your objects, there are two solutions:
 
 2. Specify the ordering of your styles by specifying them using a
    [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map).
-   Since `Map`s preserve their insertion order, Aphrodite is able to place your
+   Since `Map`s preserve their insertion order, afrododi is able to place your
    styles in the correct order.
 
    ```js
@@ -526,29 +526,29 @@ the order that they appear in your objects, there are two solutions:
 
 ## Advanced: Extensions
 
-Extra features can be added to Aphrodite using extensions.
+Extra features can be added to afrododi using extensions.
 
-To add extensions to Aphrodite, call `StyleSheet.extend` with the extensions
+To add extensions to afrododi, call `StyleSheet.extend` with the extensions
 you are adding. The result will be an object containing the usual exports of
-Aphrodite (`css`, `StyleSheet`, etc.) which will have your extensions included.
+afrododi (`css`, `StyleSheet`, etc.) which will have your extensions included.
 For example:
 
 ```js
-// my-aphrodite.js
-import {StyleSheet} from "aphrodite";
+// my-afrododi.js
+import {StyleSheet} from "afrododi";
 
 export default StyleSheet.extend([extension1, extension2]);
 
 // styled.js
-import {StyleSheet, css} from "my-aphrodite.js";
+import {StyleSheet, css} from "my-afrododi.js";
 
 const styles = StyleSheet.create({
     ...
 });
 ```
 
-**Note**: Using extensions may cause Aphrodite's styles to not work properly.
-Plain Aphrodite, when used properly, ensures that the correct styles will
+**Note**: Using extensions may cause afrododi's styles to not work properly.
+Plain afrododi, when used properly, ensures that the correct styles will
 always be applied to elements. Due to CSS specificity rules, extensions might
 allow you to generate styles that conflict with each other, causing incorrect
 styles to be shown. See the global extension below to see what could go wrong.
@@ -558,7 +558,7 @@ styles to be shown. See the global extension below to see what could go wrong.
 Currently, there is only one kind of extension available: selector handlers.
 These kinds of extensions let you look at the selectors that someone specifies
 and generate new selectors based on them. They are used to handle pseudo-styles
-and media queries inside of Aphrodite. See the
+and media queries inside of afrododi. See the
 [`defaultSelectorHandlers` docs](src/generate.js?L8) for information about how
 to create a selector handler function.
 
@@ -620,8 +620,8 @@ to the string value `production`.
 
 # Tools
 
-- [Aphrodite output tool](https://output.jsbin.com/qoseye) - Paste what you pass to `StyleSheet.create` and see the generated CSS
-- [jest-aphrodite-react](https://github.com/dmiller9911/jest-aphrodite-react) - Utilities for testing with React and Jest.
+- [afrododi output tool](https://output.jsbin.com/qoseye) - Paste what you pass to `StyleSheet.create` and see the generated CSS
+- [jest-afrododi-react](https://github.com/dmiller9911/jest-afrododi-react) - Utilities for testing with React and Jest.
 
 # TODO
 
@@ -642,6 +642,6 @@ Copyright (c) 2016 Khan Academy
 
 [webcomponents]: http://w3c.github.io/webcomponents/spec/custom
 
-[gzip-badge]: http://img.badgesize.io/https://unpkg.com/aphrodite/dist/aphrodite.umd.min.js?compression=gzip&label=gzip%20size
-[size-badge]: http://img.badgesize.io/https://unpkg.com/aphrodite/dist/aphrodite.umd.min.js?label=size
-[unpkg-dist]: https://unpkg.com/aphrodite/dist/
+[gzip-badge]: http://img.badgesize.io/https://unpkg.com/afrododi/dist/afrododi.umd.min.js?compression=gzip&label=gzip%20size
+[size-badge]: http://img.badgesize.io/https://unpkg.com/afrododi/dist/afrododi.umd.min.js?label=size
+[unpkg-dist]: https://unpkg.com/afrododi/dist/

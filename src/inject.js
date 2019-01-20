@@ -13,19 +13,19 @@ import type { SelectorHandler } from './generate.js';
 
 // The current <style> tag we are inserting into, or null if we haven't
 // inserted anything yet. We could find this each time using
-// `document.querySelector("style[data-aphrodite"])`, but holding onto it is
+// `document.querySelector("style[data-afrododi"])`, but holding onto it is
 // faster.
 let styleTag /* : ?HTMLStyleElement */ = null;
 
 // Inject a set of rules into a <style> tag in the head of the document. This
 // will automatically create a style tag and then continue to use it for
-// multiple injections. It will also use a style tag with the `data-aphrodite`
+// multiple injections. It will also use a style tag with the `data-afrododi`
 // tag on it if that exists in the DOM. This could be used for e.g. reusing the
 // same style tag that server-side rendering inserts.
 const injectStyleTag = (cssRules /* : string[] */) => {
     if (styleTag == null) {
-        // Try to find a style tag with the `data-aphrodite` attribute first.
-        styleTag = ((document.querySelector("style[data-aphrodite]") /* : any */) /* : ?HTMLStyleElement */);
+        // Try to find a style tag with the `data-afrododi` attribute first.
+        styleTag = ((document.querySelector("style[data-afrododi]") /* : any */) /* : ?HTMLStyleElement */);
 
         // If that doesn't work, generate a new style tag.
         if (styleTag == null) {
@@ -35,7 +35,7 @@ const injectStyleTag = (cssRules /* : string[] */) => {
             styleTag = document.createElement('style');
 
             styleTag.type = 'text/css';
-            styleTag.setAttribute("data-aphrodite", "");
+            styleTag.setAttribute("data-afrododi", "");
             head.appendChild(styleTag);
         }
     }
@@ -143,7 +143,7 @@ const stringHandlers = {
     },
 };
 
-// This is a map from Aphrodite's generated class names to `true` (acting as a
+// This is a map from afrododi's generated class names to `true` (acting as a
 // set of class names)
 let alreadyInjected = {};
 
