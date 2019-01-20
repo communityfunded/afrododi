@@ -13,6 +13,8 @@ const {
     flushToStyleTag,
     injectAndGetClassName,
     defaultSelectorHandlers,
+    CSSProvider,
+    withCSS,
 } = afrododi;
 
 export {
@@ -24,4 +26,6 @@ export {
     flushToStyleTag,
     injectAndGetClassName,
     defaultSelectorHandlers,
+    CSSProvider,
+    withCSS,
 };

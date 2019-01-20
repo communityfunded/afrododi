@@ -9,6 +9,10 @@ import {
     getRenderedClassNames,
     getBufferedStyles,
 } from './inject';
+import {
+    CSSProvider,
+    withCSS,
+} from './react';
 import {defaultSelectorHandlers} from './generate';
 
 /* ::
@@ -183,8 +187,12 @@ export default function makeExports(
 
         css(context /* : StyleContext */, ...styleDefinitions /* : MaybeSheetDefinition[] */) {
             return injectAndGetClassName(
-                context, useImportant, styleDefinitions, selectorHandlers);
+                context, useImportant, styleDefinitions, selectorHandlers
+            );
         },
+
+        CSSProvider,
+        withCSS,
 
         flushToStyleTag,
         injectAndGetClassName,

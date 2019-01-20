@@ -1,3 +1,5 @@
+import {Context, ProviderExoticComponent, ProviderProps, ComponentType, ComponentClass} from 'react'
+
 import {
     CSSProperties,
     CSSPropertiesComplete,
@@ -13,6 +15,8 @@ export {
     CSSPropertiesPseudo,
     CSSWideKeyword,
 };
+
+type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 /**
  * afrododi style declaration
@@ -30,7 +34,7 @@ export interface StyleContext {
   alreadyInjected: { [key: string]: boolean },
   injectionBuffer: string[],
   isBuffering: boolean,
-};
+}
 
 /**
  * Return value from StyleSheet.create.
@@ -110,6 +114,22 @@ export interface SelectorHandler {
 export interface Extension {
     selectorHandler?: SelectorHandler;
 }
+
+export interface CSSProps {
+  css: (...styles: CSSInputTypes[]) => string
+}
+
+export type CSSContext = Context<StyleContext>;
+export type CSSProvider = ProviderExoticComponent<ProviderProps<StyleContext>>
+
+type Shared<
+    InjectedProps,
+    DecorationTargetProps extends Shared<InjectedProps, DecorationTargetProps>
+    > = {
+        [P in Extract<keyof InjectedProps, keyof DecorationTargetProps>]?: InjectedProps[P] extends DecorationTargetProps[P] ? DecorationTargetProps[P] : never;
+    };
+
+export function withCSS<P extends Shared<CSSProps, P>>(component: ComponentType<P>): ComponentClass<Omit<P, keyof CSSProps>>;
 
 /**
  * Calling StyleSheet.extend() returns an object with each of the exported
