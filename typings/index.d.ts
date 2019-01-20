@@ -49,6 +49,9 @@ export interface StyleSheetStatic {
     create<T extends StyleDeclaration<T>>(
         styles: T
     ): {[K in keyof T]: StyleDeclarationValue };
+
+    startBuffering(): StyleContext;
+
     /**
      * Rehydrate class names from server renderer
      */
@@ -121,13 +124,13 @@ export interface CSSProps {
 }
 
 export type CSSContext = Context<StyleContext>;
-export type CSSProvider = ProviderExoticComponent<ProviderProps<StyleContext>>
+export const CSSProvider: ProviderExoticComponent<ProviderProps<StyleContext>>;
 
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
 export function withCSS<P extends CSSProps>(component: ComponentType<P>):
-  ComponentClass<Omit<P, keyof CSSProps>>;
+    ComponentClass<Omit<P, keyof CSSProps>>;
 
 /**
  * Calling StyleSheet.extend() returns an object with each of the exported

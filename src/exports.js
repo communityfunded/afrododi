@@ -61,6 +61,8 @@ const StyleSheet = {
         return mappedSheetDefinition;
     },
 
+    startBuffering,
+
     rehydrate(context /* : StyleContext */, renderedClassNames /* : string[] */ =[]) {
         addRenderedClassNames(context, renderedClassNames);
     },

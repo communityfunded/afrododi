@@ -2139,6 +2139,10 @@
 
           return create;
       }(),
+
+
+      startBuffering: startBuffering,
+
       rehydrate: function () {
           function rehydrate(context /* : StyleContext */) {
               var renderedClassNames /* : string[] */ = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
