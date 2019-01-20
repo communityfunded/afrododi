@@ -1,4 +1,4 @@
-import {Context, ProviderExoticComponent, ProviderProps, ComponentType, ComponentClass} from 'react'
+import {Context, ProviderExoticComponent, ProviderProps, ComponentType, ComponentClass, StatelessComponent, Component} from 'react'
 
 import {
     CSSProperties,
@@ -129,7 +129,8 @@ type Shared<
         [P in Extract<keyof InjectedProps, keyof DecorationTargetProps>]?: InjectedProps[P] extends DecorationTargetProps[P] ? DecorationTargetProps[P] : never;
     };
 
-export function withCSS<P extends Shared<CSSProps, P>>(component: ComponentType<P>): ComponentClass<Omit<P, keyof CSSProps>>;
+// export function withCss<P extends CSSProps>(component: StatelessComponent<P>): ComponentClass<OuterProps>
+export function withCSS<P>(component: ComponentClass<CSSProps>): ComponentClass<Omit<CSSProps, 'css'>>
 
 /**
  * Calling StyleSheet.extend() returns an object with each of the exported
