@@ -2,7 +2,6 @@
 import {hashString} from './util';
 import {
     injectAndGetClassName,
-    reset,
     startBuffering,
     flushToString,
     flushToStyleTag,
@@ -14,9 +13,11 @@ import {defaultSelectorHandlers} from './generate';
 
 /* ::
 import type { SelectorHandler } from './generate.js';
+import type { StyleContext } from './inject.js';
 export type SheetDefinition = { [id:string]: any };
 export type SheetDefinitions = SheetDefinition | SheetDefinition[];
-type RenderFunction = () => string;
+type RenderFunction = (context: StyleContext) => string;
+type AsyncRenderFunction = (context: StyleContext) => Promise<string>;
 type Extension = {
     selectorHandler: SelectorHandler
 };
@@ -56,8 +57,8 @@ const StyleSheet = {
         return mappedSheetDefinition;
     },
 
-    rehydrate(renderedClassNames /* : string[] */ =[]) {
-        addRenderedClassNames(renderedClassNames);
+    rehydrate(context /* : StyleContext */, renderedClassNames /* : string[] */ =[]) {
+        addRenderedClassNames(context, renderedClassNames);
     },
 };
 
@@ -75,27 +76,33 @@ const StyleSheetServer = typeof window !== 'undefined'
     ? null
     : {
         renderStatic(renderFunc /* : RenderFunction */) {
-            reset();
-            startBuffering();
-            const html = renderFunc();
-            const cssContent = flushToString();
+            const context = startBuffering();
+            const html = renderFunc(context);
+            const cssContent = flushToString(context);
 
             return {
                 html: html,
                 css: {
                     content: cssContent,
-                    renderedClassNames: getRenderedClassNames(),
+                    renderedClassNames: getRenderedClassNames(context),
                 },
             };
         },
-        flushBuffer() {
-            const cssContent = flushToString();
-            reset();
+        renderStaticAsync(renderFunc /* : AsyncRenderFunction */) {
+            const context = startBuffering();
 
-            return cssContent;
+            return renderFunc(context).then((html /* : string */) => {
+                const cssContent = flushToString(context);
+
+                return {
+                    html: html,
+                    css: {
+                        content: cssContent,
+                        renderedClassNames: getRenderedClassNames(context),
+                    },
+                };
+            })
         },
-        startBuffering,
-        getRenderedClassNames,
     };
 
 /**
@@ -107,35 +114,21 @@ const StyleSheetTestUtils = process.env.NODE_ENV === 'production'
     ? null
     : {
         /**
-        * Prevent styles from being injected into the DOM.
-        *
-        * This is useful in situations where you'd like to test rendering UI
-        * components which use afrododi without any of the side-effects of
-        * afrododi happening. Particularly useful for testing the output of
-        * components when you have no DOM, e.g. testing in Node without a fake DOM.
-        *
-        * Should be paired with a subsequent call to
-        * clearBufferAndResumeStyleInjection.
-        */
-        suppressStyleInjection() {
-            reset();
-            startBuffering();
+         * Gets a new StyleContext instance to use during testing
+         *
+         * @returns {object}  StyleContext instance for use during testing
+         */
+        getContext() /* : StyleContext */ {
+            return startBuffering();
         },
 
         /**
-        * Opposite method of preventStyleInject.
-        */
-        clearBufferAndResumeStyleInjection() {
-            reset();
-        },
-
-        /**
-        * Returns a string of buffered styles which have not been flushed
-        *
-        * @returns {string}  Buffer of styles which have not yet been flushed.
-        */
-        getBufferedStyles() {
-            return getBufferedStyles();
+         * Returns a string of buffered styles which have not been flushed
+         *
+         * @returns {string}  Buffer of styles which have not yet been flushed.
+         */
+        getBufferedStyles(context /* : StyleContext */) /* : string[] */ {
+            return getBufferedStyles(context);
         }
     };
 
@@ -188,9 +181,9 @@ export default function makeExports(
             hashFn = shouldMinify ? hashString : unminifiedHashFn;
         },
 
-        css(...styleDefinitions /* : MaybeSheetDefinition[] */) {
+        css(context /* : StyleContext */, ...styleDefinitions /* : MaybeSheetDefinition[] */) {
             return injectAndGetClassName(
-                useImportant, styleDefinitions, selectorHandlers);
+                context, useImportant, styleDefinitions, selectorHandlers);
         },
 
         flushToStyleTag,

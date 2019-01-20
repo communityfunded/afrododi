@@ -23,6 +23,16 @@ export type StyleDeclaration<T = {}> = {
 };
 
 /**
+ * Style buffer context
+ */
+export interface StyleContext {
+  styleTag?: HTMLStyleElement,
+  alreadyInjected: { [key: string]: boolean },
+  injectionBuffer: string[],
+  isBuffering: boolean,
+};
+
+/**
  * Return value from StyleSheet.create.
  */
 export type StyleDeclarationValue = object;
@@ -37,7 +47,7 @@ export interface StyleSheetStatic {
     /**
      * Rehydrate class names from server renderer
      */
-    rehydrate(renderedClassNames: string[]): void;
+    rehydrate(context: StyleContext, renderedClassNames: string[]): void;
 
     extend(extensions: Extension[]): Exports;
 }
@@ -67,37 +77,26 @@ interface StaticRendererResult {
  * Utilities for using afrododi server-side.
  */
 interface StyleSheetServerStatic {
-    renderStatic(renderFunc: () => string): StaticRendererResult;
-    startBuffering(): void;
-    flushBuffer(): string;
-    getRenderedClassNames(): string[];
+    renderStatic(renderFunc: (context: StyleContext) => string): StaticRendererResult;
+    renderStaticAsync(renderFunc: (context: StyleContext) => Promise<string>):
+      Promise<StaticRendererResult>;
 }
 
 export var StyleSheetServer: StyleSheetServerStatic;
 
 interface StyleSheetTestUtilsStatic {
     /**
-     * Prevent styles from being injected into the DOM.
+     * Gets a new StyleContext instance to use during testing
      *
-     * This is useful in situations where you'd like to test rendering UI
-     * components which use afrododi without any of the side-effects of
-     * afrododi happening. Particularly useful for testing the output of
-     * components when you have no DOM, e.g. testing in Node without a fake DOM.
-     *
-     * Should be paired with a subsequent call to
-     * clearBufferAndResumeStyleInjection.
+     * @returns {object}  StyleContext instance for use during testing
      */
-    suppressStyleInjection(): void;
-    /**
-     * Opposite method of preventStyleInject.
-     */
-    clearBufferAndResumeStyleInjection(): void;
+    getContext(): StyleContext;
     /**
      * Returns a string of buffered styles which have not been flushed
      *
      * @returns {string}  Buffer of styles which have not yet been flushed.
      */
-    getBufferedStyles(): string[];
+    getBufferedStyles(context: StyleContext): string[];
 }
 
 export var StyleSheetTestUtils: StyleSheetTestUtilsStatic;
@@ -117,7 +116,7 @@ export interface Extension {
  * properties on it.
  */
 interface Exports {
-    css(...styles: CSSInputTypes[]): string;
+    css(context: StyleContext, ...styles: CSSInputTypes[]): string;
     StyleSheet: StyleSheetStatic;
     StyleSheetServer: StyleSheetServerStatic;
     StyleSheetTestUtils: StyleSheetTestUtilsStatic;

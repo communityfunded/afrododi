@@ -9,39 +9,60 @@ import {hashObject, hashString} from './util';
 import type { SheetDefinition, SheetDefinitions } from './index.js';
 import type { MaybeSheetDefinition } from './exports.js';
 import type { SelectorHandler } from './generate.js';
+
+export type StyleContext = {
+    styleTag?: HTMLStyleElement,
+    alreadyInjected: { [string]: boolean },
+    injectionBuffer: string[],
+    isBuffering: boolean,
+};
 */
 
-// The current <style> tag we are inserting into, or null if we haven't
-// inserted anything yet. We could find this each time using
-// `document.querySelector("style[data-afrododi"])`, but holding onto it is
-// faster.
-let styleTag /* : ?HTMLStyleElement */ = null;
+export const createContext = () /* : StyleContext */ => ({
+    // The current <style> tag we are inserting into, or null if we haven't
+    // inserted anything yet. We could find this each time using
+    // `document.querySelector("style[data-afrododi"])`, but holding onto it is
+    // faster.
+    styleTag: undefined,
+
+    // This is a map from afrododi's generated class names to `true` (acting as a
+    // set of class names)
+    alreadyInjected: {},
+
+    // This is the buffer of styles which have not yet been flushed.
+    injectionBuffer: [],
+
+    // A flag to tell if we are already buffering styles. This could happen either
+    // because we scheduled a flush call already, so newly added styles will
+    // already be flushed, or because we are statically buffering on the server.
+    isBuffering: false,
+})
 
 // Inject a set of rules into a <style> tag in the head of the document. This
 // will automatically create a style tag and then continue to use it for
 // multiple injections. It will also use a style tag with the `data-afrododi`
 // tag on it if that exists in the DOM. This could be used for e.g. reusing the
 // same style tag that server-side rendering inserts.
-const injectStyleTag = (cssRules /* : string[] */) => {
-    if (styleTag == null) {
+const injectStyleTag = (context /* : StyleContext */, cssRules /* : string[] */) => {
+    if (context.styleTag == null) {
         // Try to find a style tag with the `data-afrododi` attribute first.
-        styleTag = ((document.querySelector("style[data-afrododi]") /* : any */) /* : ?HTMLStyleElement */);
+        context.styleTag = ((document.querySelector("style[data-afrododi]") /* : any */) /* : HTMLStyleElement | void */);
 
         // If that doesn't work, generate a new style tag.
-        if (styleTag == null) {
+        if (context.styleTag == null) {
             // Taken from
             // http://stackoverflow.com/questions/524696/how-to-create-a-style-tag-with-javascript
             const head = document.head || document.getElementsByTagName('head')[0];
-            styleTag = document.createElement('style');
+            context.styleTag = document.createElement('style');
 
-            styleTag.type = 'text/css';
-            styleTag.setAttribute("data-afrododi", "");
-            head.appendChild(styleTag);
+            context.styleTag.type = 'text/css';
+            context.styleTag.setAttribute("data-afrododi", "");
+            if (context.styleTag) head.appendChild(context.styleTag);
         }
     }
 
     // $FlowFixMe
-    const sheet = ((styleTag.styleSheet || styleTag.sheet /* : any */) /* : CSSStyleSheet */);
+    const sheet = ((context.styleTag.styleSheet || context.styleTag.sheet /* : any */) /* : CSSStyleSheet */);
 
     if (sheet.insertRule) {
         let numRules = sheet.cssRules.length;
@@ -53,8 +74,9 @@ const injectStyleTag = (cssRules /* : string[] */) => {
                 // The selector for this rule wasn't compatible with the browser
             }
         });
-    } else {
-        styleTag.innerText = (styleTag.innerText || '') + cssRules.join('');
+    } else if (context.styleTag) {
+        // $FlowFixMe
+        context.styleTag.innerText = (context.styleTag.innerText || '') + cssRules.join('');
     }
 };
 
@@ -65,7 +87,7 @@ const stringHandlers = {
     // them as @font-face rules that we need to inject. The value of fontFamily
     // can either be a string (as normal), an object (a single font face), or
     // an array of objects and strings.
-    fontFamily: function fontFamily(val) {
+    fontFamily: function fontFamily(context /* : StyleContext */, val) {
         if (Array.isArray(val)) {
             const nameMap = {};
 
@@ -75,7 +97,7 @@ const stringHandlers = {
 
             return Object.keys(nameMap).join(",");
         } else if (typeof val === "object") {
-            injectStyleOnce(val.src, "@font-face", [val], false);
+            injectStyleOnce(context, val.src, "@font-face", [val], false);
             return `"${val.fontFamily}"`;
         } else {
             return val;
@@ -102,7 +124,7 @@ const stringHandlers = {
     // TODO(emily): `stringHandlers` doesn't let us rename the key, so I have
     // to use `animationName` here. Improve that so we can call this
     // `animation` instead of `animationName`.
-    animationName: function animationName(val, selectorHandlers) {
+    animationName: function animationName(context /* : StyleContext */, val, selectorHandlers) {
         if (Array.isArray(val)) {
             return val.map(v => animationName(v, selectorHandlers)).join(",");
         } else if (typeof val === "object") {
@@ -134,7 +156,7 @@ const stringHandlers = {
             }
             finalVal += '}';
 
-            injectGeneratedCSSOnce(name, [finalVal]);
+            injectGeneratedCSSOnce(context, name, [finalVal]);
 
             return name;
         } else {
@@ -143,24 +165,12 @@ const stringHandlers = {
     },
 };
 
-// This is a map from afrododi's generated class names to `true` (acting as a
-// set of class names)
-let alreadyInjected = {};
-
-// This is the buffer of styles which have not yet been flushed.
-let injectionBuffer /* : string[] */ = [];
-
-// A flag to tell if we are already buffering styles. This could happen either
-// because we scheduled a flush call already, so newly added styles will
-// already be flushed, or because we are statically buffering on the server.
-let isBuffering = false;
-
-const injectGeneratedCSSOnce = (key, generatedCSS) => {
-    if (alreadyInjected[key]) {
+const injectGeneratedCSSOnce = (context /* : StyleContext */, key, generatedCSS) => {
+    if (context.alreadyInjected[key]) {
         return;
     }
 
-    if (!isBuffering) {
+    if (!context.isBuffering) {
         // We should never be automatically buffering on the server (or any
         // place without a document), so guard against that.
         if (typeof document === "undefined") {
@@ -170,22 +180,23 @@ const injectGeneratedCSSOnce = (key, generatedCSS) => {
 
         // If we're not already buffering, schedule a call to flush the
         // current styles.
-        isBuffering = true;
+        context.isBuffering = true;
         asap(flushToStyleTag);
     }
 
-    injectionBuffer.push(...generatedCSS);
-    alreadyInjected[key] = true;
+    context.injectionBuffer.push(...generatedCSS);
+    context.alreadyInjected[key] = true;
 }
 
 export const injectStyleOnce = (
+    context /* : StyleContext */,
     key /* : string */,
     selector /* : string */,
     definitions /* : SheetDefinition[] */,
     useImportant /* : boolean */,
     selectorHandlers /* : SelectorHandler[] */ = []
 ) => {
-    if (alreadyInjected[key]) {
+    if (context.alreadyInjected[key]) {
         return;
     }
 
@@ -193,53 +204,45 @@ export const injectStyleOnce = (
         selector, definitions, selectorHandlers,
         stringHandlers, useImportant);
 
-    injectGeneratedCSSOnce(key, generated);
+    injectGeneratedCSSOnce(context, key, generated);
 };
 
-export const reset = () => {
-    injectionBuffer = [];
-    alreadyInjected = {};
-    isBuffering = false;
-    styleTag = null;
-};
-
-export const getBufferedStyles = () => {
-    return injectionBuffer;
+export const getBufferedStyles = (context /* : StyleContext */) => {
+    return context.injectionBuffer;
 }
 
-export const startBuffering = () => {
-    if (isBuffering) {
-        throw new Error(
-            "Cannot buffer while already buffering");
-    }
-    isBuffering = true;
+export const startBuffering = () /* : StyleContext */ => {
+    const context = createContext();
+    context.isBuffering = true;
+
+    return context
 };
 
-const flushToArray = () => {
-    isBuffering = false;
-    const ret = injectionBuffer;
-    injectionBuffer = [];
+const flushToArray = (context /* : StyleContext */) => {
+    context.isBuffering = false;
+    const ret = context.injectionBuffer;
+    context.injectionBuffer = [];
     return ret;
 };
 
-export const flushToString = () => {
-    return flushToArray().join('');
+export const flushToString = (context /* : StyleContext */) => {
+    return flushToArray(context).join('');
 };
 
-export const flushToStyleTag = () => {
-    const cssRules = flushToArray();
+export const flushToStyleTag = (context /* : StyleContext */) => {
+    const cssRules = flushToArray(context);
     if (cssRules.length > 0) {
-        injectStyleTag(cssRules);
+        injectStyleTag(context, cssRules);
     }
 };
 
-export const getRenderedClassNames = () /* : string[] */ => {
-    return Object.keys(alreadyInjected);
+export const getRenderedClassNames = (context /* : StyleContext */) /* : string[] */ => {
+    return Object.keys(context.alreadyInjected);
 };
 
-export const addRenderedClassNames = (classNames /* : string[] */) => {
+export const addRenderedClassNames = (context /* : StyleContext */, classNames /* : string[] */) => {
     classNames.forEach(className => {
-        alreadyInjected[className] = true;
+        context.alreadyInjected[className] = true;
     });
 };
 
@@ -282,6 +285,7 @@ const processStyleDefinitions = (
  *     return value of StyleSheet.create().
  */
 export const injectAndGetClassName = (
+    context /* : StyleContext */,
     useImportant /* : boolean */,
     styleDefinitions /* : MaybeSheetDefinition[] */,
     selectorHandlers /* : SelectorHandler[] */
@@ -313,6 +317,7 @@ export const injectAndGetClassName = (
     }
 
     injectStyleOnce(
+        context,
         className,
         `.${className}`,
         definitionBits,
