@@ -1,6 +1,6 @@
 {
   "name": "afrododi",
-  "version": "2.2.3",
+  "version": "3.0.0",
   "description": "Framework-agnostic async-compatible CSS-in-JS with support for server-side rendering, browser prefixing, and minimum CSS generation",
   "keywords": [
     "css",
