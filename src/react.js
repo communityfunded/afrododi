@@ -1,4 +1,5 @@
 import React from 'react';
+import hoistNonReactStatics from 'hoist-non-react-statics';
 
 /* ::
 import type {ComponentType, Node} from 'react';
