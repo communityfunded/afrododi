@@ -62,11 +62,11 @@ export interface StyleSheetStatic {
 
 export var StyleSheet: StyleSheetStatic;
 
-type CSSInputTypes = StyleDeclarationValue | false | null | void;
+export type CSSInputTypes = StyleDeclarationValue | false | null | void;
 /**
  * Get class names from passed styles
  */
-export function css(...styles: CSSInputTypes[]): string;
+export function css(context: StyleContext, ...styles: CSSInputTypes[]): string;
 
 /**
  *  Override afrododi minifying styles to hashes in production
