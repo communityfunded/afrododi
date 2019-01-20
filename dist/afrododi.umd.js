@@ -2046,7 +2046,10 @@
           _createClass$1(Wrapper, [{
               key: 'css',
               value: function () {
-                  function css$$1(context /* : StyleContext */) {
+                  function css(context /* : StyleContext */) {
+                      var _require = require('./index'),
+                          css = _require.css;
+
                       return function () /* : MaybeSheetDefinition[] */{
                           for (var _len = arguments.length, styleDefinitions = Array(_len), _key = 0; _key < _len; _key++) {
                               styleDefinitions[_key] = arguments[_key];
@@ -2056,7 +2059,7 @@
                       };
                   }
 
-                  return css$$1;
+                  return css;
               }()
           }, {
               key: 'render',
@@ -2268,6 +2271,10 @@
           }(),
           css: function () {
               function css(context /* : StyleContext */) /* : MaybeSheetDefinition[] */{
+                  if (!context.hasOwnProperty('injectionBuffer')) {
+                      throw new Error('The css() function was called without a StyleContext instance. Consider using the withCSS() higher-order component instead.');
+                  }
+
                   for (var _len = arguments.length, styleDefinitions = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
                       styleDefinitions[_key - 1] = arguments[_key];
                   }

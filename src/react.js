@@ -1,5 +1,4 @@
 import React from 'react';
-import {css} from './index';
 
 /* ::
 import type {ComponentType, Node} from 'react';
@@ -26,6 +25,9 @@ export const withCSS = (WrappedComponent /* : ComponentType */) => (
         }
 
         css (context /* : StyleContext */, ) {
+            // Avoid a circular import
+            const {css} = require('./index')
+
             return (...styleDefinitions /* : MaybeSheetDefinition[] */) => {
                 return css(context, styleDefinitions)
             }

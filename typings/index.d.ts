@@ -19,12 +19,21 @@ export {
     CSSWideKeyword,
 };
 
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+// For pseudo selectors and media queries
+export interface OpenCSSProperties extends Omit<CSSProperties, 'width' | 'height'> {
+  [k: string]: CSSProperties[keyof CSSProperties] | CSSProperties;
+  width?: string | number | string[],
+  height?: string | number | string[]
+}
+
 /**
  * afrododi style declaration
  */
-export type StyleDeclarationMap = Map<keyof CSSProperties, string | number>;
+export type StyleDeclarationMap = Map<keyof OpenCSSProperties, string | number>;
 export type StyleDeclaration<T = {}> = {
-    [P in keyof T]: CSSProperties | StyleDeclarationMap;
+    [P in keyof T]: OpenCSSProperties | StyleDeclarationMap;
 };
 
 /**
@@ -125,8 +134,6 @@ export interface CSSProps {
 
 export type CSSContext = Context<StyleContext>;
 export const CSSProvider: ProviderExoticComponent<ProviderProps<StyleContext>>;
-
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
 export function withCSS<P extends CSSProps>(component: ComponentType<P>):
