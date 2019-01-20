@@ -14,10 +14,19 @@ export type Context = {
 };
 */
 
+function getDisplayName(WrappedComponent /* : ComponentType */) {
+    return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+}
+
 export const CSSContext /* : Context */ = React.createContext();
 
-export const withCSS = (WrappedComponent /* : ComponentType */) => (
+export function withCSS (WrappedComponent /* : ComponentType */) {
+    const withDisplayName = `withCSS(${getDisplayName(WrappedComponent)})`;
+
     class Wrapper extends React.Component {
+        static displayName = withDisplayName;
+        static WrappedComponent = WrappedComponent;
+
         constructor (props) {
             super(props);
             this.renderContext = this.renderContext.bind(this);
@@ -45,6 +54,8 @@ export const withCSS = (WrappedComponent /* : ComponentType */) => (
             return <WrappedComponent {...this.props} css={this.css(context)} />
         }
     }
-)
+
+    return hoistNonReactStatics(Wrapper, WrappedComponent, {});
+}
 
 export const CSSProvider = CSSContext.Provider
