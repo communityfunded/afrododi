@@ -1,10 +1,8 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('hoist-non-react-statics')) :
-  typeof define === 'function' && define.amd ? define(['exports', 'hoist-non-react-statics'], factory) :
-  (factory((global.afrododi = {}),global.hoistNonReactStatics));
-}(this, (function (exports,hoistNonReactStatics) { 'use strict';
-
-  hoistNonReactStatics = hoistNonReactStatics && hoistNonReactStatics.hasOwnProperty('default') ? hoistNonReactStatics['default'] : hoistNonReactStatics;
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
+  typeof define === 'function' && define.amd ? define(['exports'], factory) :
+  (factory((global.afrododi = {})));
+}(this, (function (exports) { 'use strict';
 
   function hash(str) {
     var hash = 5381,
@@ -2005,6 +2003,138 @@
   }
   });
 
+  var reactIs_production_min = createCommonjsModule(function (module, exports) {
+  Object.defineProperty(exports,"__esModule",{value:!0});
+  var b="function"===typeof Symbol&&Symbol.for,c=b?Symbol.for("react.element"):60103,d=b?Symbol.for("react.portal"):60106,e=b?Symbol.for("react.fragment"):60107,f=b?Symbol.for("react.strict_mode"):60108,g=b?Symbol.for("react.profiler"):60114,h=b?Symbol.for("react.provider"):60109,k=b?Symbol.for("react.context"):60110,l=b?Symbol.for("react.async_mode"):60111,m=b?Symbol.for("react.concurrent_mode"):60111,n=b?Symbol.for("react.forward_ref"):60112,p=b?Symbol.for("react.suspense"):60113,q=b?Symbol.for("react.memo"):
+  60115,r=b?Symbol.for("react.lazy"):60116;function t(a){if("object"===typeof a&&null!==a){var u=a.$$typeof;switch(u){case c:switch(a=a.type,a){case l:case m:case e:case g:case f:case p:return a;default:switch(a=a&&a.$$typeof,a){case k:case n:case h:return a;default:return u}}case r:case q:case d:return u}}}function v(a){return t(a)===m}exports.typeOf=t;exports.AsyncMode=l;exports.ConcurrentMode=m;exports.ContextConsumer=k;exports.ContextProvider=h;exports.Element=c;exports.ForwardRef=n;
+  exports.Fragment=e;exports.Lazy=r;exports.Memo=q;exports.Portal=d;exports.Profiler=g;exports.StrictMode=f;exports.Suspense=p;exports.isValidElementType=function(a){return "string"===typeof a||"function"===typeof a||a===e||a===m||a===g||a===f||a===p||"object"===typeof a&&null!==a&&(a.$$typeof===r||a.$$typeof===q||a.$$typeof===h||a.$$typeof===k||a.$$typeof===n)};exports.isAsyncMode=function(a){return v(a)||t(a)===l};exports.isConcurrentMode=v;exports.isContextConsumer=function(a){return t(a)===k};
+  exports.isContextProvider=function(a){return t(a)===h};exports.isElement=function(a){return "object"===typeof a&&null!==a&&a.$$typeof===c};exports.isForwardRef=function(a){return t(a)===n};exports.isFragment=function(a){return t(a)===e};exports.isLazy=function(a){return t(a)===r};exports.isMemo=function(a){return t(a)===q};exports.isPortal=function(a){return t(a)===d};exports.isProfiler=function(a){return t(a)===g};exports.isStrictMode=function(a){return t(a)===f};
+  exports.isSuspense=function(a){return t(a)===p};
+  });
+
+  unwrapExports(reactIs_production_min);
+  var reactIs_production_min_1 = reactIs_production_min.typeOf;
+  var reactIs_production_min_2 = reactIs_production_min.AsyncMode;
+  var reactIs_production_min_3 = reactIs_production_min.ConcurrentMode;
+  var reactIs_production_min_4 = reactIs_production_min.ContextConsumer;
+  var reactIs_production_min_5 = reactIs_production_min.ContextProvider;
+  var reactIs_production_min_6 = reactIs_production_min.Element;
+  var reactIs_production_min_7 = reactIs_production_min.ForwardRef;
+  var reactIs_production_min_8 = reactIs_production_min.Fragment;
+  var reactIs_production_min_9 = reactIs_production_min.Lazy;
+  var reactIs_production_min_10 = reactIs_production_min.Memo;
+  var reactIs_production_min_11 = reactIs_production_min.Portal;
+  var reactIs_production_min_12 = reactIs_production_min.Profiler;
+  var reactIs_production_min_13 = reactIs_production_min.StrictMode;
+  var reactIs_production_min_14 = reactIs_production_min.Suspense;
+  var reactIs_production_min_15 = reactIs_production_min.isValidElementType;
+  var reactIs_production_min_16 = reactIs_production_min.isAsyncMode;
+  var reactIs_production_min_17 = reactIs_production_min.isConcurrentMode;
+  var reactIs_production_min_18 = reactIs_production_min.isContextConsumer;
+  var reactIs_production_min_19 = reactIs_production_min.isContextProvider;
+  var reactIs_production_min_20 = reactIs_production_min.isElement;
+  var reactIs_production_min_21 = reactIs_production_min.isForwardRef;
+  var reactIs_production_min_22 = reactIs_production_min.isFragment;
+  var reactIs_production_min_23 = reactIs_production_min.isLazy;
+  var reactIs_production_min_24 = reactIs_production_min.isMemo;
+  var reactIs_production_min_25 = reactIs_production_min.isPortal;
+  var reactIs_production_min_26 = reactIs_production_min.isProfiler;
+  var reactIs_production_min_27 = reactIs_production_min.isStrictMode;
+  var reactIs_production_min_28 = reactIs_production_min.isSuspense;
+
+  var reactIs = createCommonjsModule(function (module) {
+
+  {
+    module.exports = reactIs_production_min;
+  }
+  });
+
+  /**
+   * Copyright 2015, Yahoo! Inc.
+   * Copyrights licensed under the New BSD License. See the accompanying LICENSE file for terms.
+   */
+
+  var REACT_STATICS = {
+      childContextTypes: true,
+      contextType: true,
+      contextTypes: true,
+      defaultProps: true,
+      displayName: true,
+      getDefaultProps: true,
+      getDerivedStateFromError: true,
+      getDerivedStateFromProps: true,
+      mixins: true,
+      propTypes: true,
+      type: true
+  };
+
+  var KNOWN_STATICS = {
+      name: true,
+      length: true,
+      prototype: true,
+      caller: true,
+      callee: true,
+      arguments: true,
+      arity: true
+  };
+
+  var FORWARD_REF_STATICS = {
+      '$$typeof': true,
+      render: true,
+      defaultProps: true,
+      displayName: true,
+      propTypes: true
+  };
+
+  var TYPE_STATICS = {};
+  TYPE_STATICS[reactIs.ForwardRef] = FORWARD_REF_STATICS;
+
+  var defineProperty = Object.defineProperty;
+  var getOwnPropertyNames = Object.getOwnPropertyNames;
+  var getOwnPropertySymbols$1 = Object.getOwnPropertySymbols;
+  var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+  var getPrototypeOf = Object.getPrototypeOf;
+  var objectPrototype = Object.prototype;
+
+  function hoistNonReactStatics(targetComponent, sourceComponent, blacklist) {
+      if (typeof sourceComponent !== 'string') {
+          // don't hoist over string (html) components
+
+          if (objectPrototype) {
+              var inheritedComponent = getPrototypeOf(sourceComponent);
+              if (inheritedComponent && inheritedComponent !== objectPrototype) {
+                  hoistNonReactStatics(targetComponent, inheritedComponent, blacklist);
+              }
+          }
+
+          var keys = getOwnPropertyNames(sourceComponent);
+
+          if (getOwnPropertySymbols$1) {
+              keys = keys.concat(getOwnPropertySymbols$1(sourceComponent));
+          }
+
+          var targetStatics = TYPE_STATICS[targetComponent['$$typeof']] || REACT_STATICS;
+          var sourceStatics = TYPE_STATICS[sourceComponent['$$typeof']] || REACT_STATICS;
+
+          for (var i = 0; i < keys.length; ++i) {
+              var key = keys[i];
+              if (!KNOWN_STATICS[key] && !(blacklist && blacklist[key]) && !(sourceStatics && sourceStatics[key]) && !(targetStatics && targetStatics[key])) {
+                  var descriptor = getOwnPropertyDescriptor(sourceComponent, key);
+                  try {
+                      // Avoid failures from read-only properties
+                      defineProperty(targetComponent, key, descriptor);
+                  } catch (e) {}
+              }
+          }
+
+          return targetComponent;
+      }
+
+      return targetComponent;
+  }
+
+  var hoistNonReactStatics_cjs = hoistNonReactStatics;
+
   var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
   var _createClass$1 = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -2100,7 +2230,7 @@
       Wrapper.displayName = withDisplayName;
       Wrapper.WrappedComponent = WrappedComponent;
 
-      return hoistNonReactStatics(Wrapper, WrappedComponent, {});
+      return hoistNonReactStatics_cjs(Wrapper, WrappedComponent, {});
   }
 
   var CSSProvider = CSSContext.Provider;
