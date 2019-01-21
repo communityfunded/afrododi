@@ -1,8 +1,10 @@
 (function (global, factory) {
-  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
-  typeof define === 'function' && define.amd ? define(['exports'], factory) :
-  (factory((global.afrododi = {})));
-}(this, (function (exports) { 'use strict';
+  typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('hoist-non-react-statics')) :
+  typeof define === 'function' && define.amd ? define(['exports', 'hoist-non-react-statics'], factory) :
+  (factory((global.afrododi = {}),global.hoistNonReactStatics));
+}(this, (function (exports,hoistNonReactStatics) { 'use strict';
+
+  hoistNonReactStatics = hoistNonReactStatics && hoistNonReactStatics.hasOwnProperty('default') ? hoistNonReactStatics['default'] : hoistNonReactStatics;
 
   function hash(str) {
     var hash = 5381,
@@ -2027,10 +2029,16 @@
   };
   */
 
+  function getDisplayName(WrappedComponent /* : ComponentType */) {
+      return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+  }
+
   var CSSContext /* : Context */ = react.createContext();
 
-  var withCSS = function withCSS(WrappedComponent /* : ComponentType */) {
-      return function (_React$Component) {
+  function withCSS(WrappedComponent /* : ComponentType */) {
+      var withDisplayName = 'withCSS(' + String(getDisplayName(WrappedComponent)) + ')';
+
+      var Wrapper = function (_React$Component) {
           _inherits(Wrapper, _React$Component);
 
           function Wrapper(props) {
@@ -2047,6 +2055,7 @@
               key: 'css',
               value: function () {
                   function css(context /* : StyleContext */) {
+                      // Avoid a circular import
                       var _require = require('./index'),
                           css = _require.css;
 
@@ -2087,7 +2096,12 @@
 
           return Wrapper;
       }(react.Component);
-  };
+
+      Wrapper.displayName = withDisplayName;
+      Wrapper.WrappedComponent = WrappedComponent;
+
+      return hoistNonReactStatics(Wrapper, WrappedComponent, {});
+  }
 
   var CSSProvider = CSSContext.Provider;
 

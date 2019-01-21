@@ -1,4 +1,5 @@
 import React from 'react';
+import hoistNonReactStatics from 'hoist-non-react-statics';
 
 /* ::
 import type {ComponentType, Node} from 'react';
@@ -14,9 +15,15 @@ export type Context = {
 };
 */
 
+function getDisplayName(WrappedComponent /* : ComponentType */) {
+    return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+}
+
 export const CSSContext /* : Context */ = React.createContext();
 
-export const withCSS = (WrappedComponent /* : ComponentType */) => (
+export function withCSS (WrappedComponent /* : ComponentType */) {
+    const withDisplayName = `withCSS(${getDisplayName(WrappedComponent)})`;
+
     class Wrapper extends React.Component {
         constructor (props) {
             super(props);
@@ -45,6 +52,11 @@ export const withCSS = (WrappedComponent /* : ComponentType */) => (
             return <WrappedComponent {...this.props} css={this.css(context)} />
         }
     }
-)
+
+    Wrapper.displayName = withDisplayName
+    Wrapper.WrappedComponent = WrappedComponent
+
+    return hoistNonReactStatics(Wrapper, WrappedComponent, {});
+}
 
 export const CSSProvider = CSSContext.Provider
