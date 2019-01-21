@@ -11,6 +11,11 @@ import {
     CSSWideKeyword,
 } from './css-properties';
 
+import {
+  Omit,
+  InferableComponentEnhancer,
+} from './inferable';
+
 export {
     CSSProperties,
     CSSPropertiesComplete,
@@ -18,8 +23,6 @@ export {
     CSSPropertiesPseudo,
     CSSWideKeyword,
 };
-
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 // For pseudo selectors and media queries
 export interface OpenCSSProperties extends Omit<CSSProperties, 'width' | 'height'> {
@@ -135,9 +138,10 @@ export interface CSSProps {
 export type CSSContext = Context<StyleContext>;
 export const CSSProvider: ProviderExoticComponent<ProviderProps<StyleContext>>;
 
+export const withCSS: InferableComponentEnhancer<CSSProps>;
 
-export function withCSS<P extends CSSProps>(component: ComponentType<P>):
-    ComponentClass<Omit<P, keyof CSSProps>>;
+// export function withCSS<C>(component: C):
+//     ComponentClass<Omit<GetProps<C>, Shared<C, keyof CSSProps>>> & {WrappedComponent: C};
 
 /**
  * Calling StyleSheet.extend() returns an object with each of the exported
