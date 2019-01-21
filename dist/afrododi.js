@@ -2,6 +2,10 @@
 
 Object.defineProperty(exports, '__esModule', { value: true });
 
+function _interopDefault (ex) { return (ex && (typeof ex === 'object') && 'default' in ex) ? ex['default'] : ex; }
+
+var hoistNonReactStatics = _interopDefault(require('hoist-non-react-statics'));
+
 function hash(str) {
   var hash = 5381,
       i    = str.length;
@@ -2025,10 +2029,16 @@ export type Context = {
 };
 */
 
+function getDisplayName(WrappedComponent /* : ComponentType */) {
+    return WrappedComponent.displayName || WrappedComponent.name || 'Component';
+}
+
 var CSSContext /* : Context */ = react.createContext();
 
-var withCSS = function withCSS(WrappedComponent /* : ComponentType */) {
-    return function (_React$Component) {
+function withCSS(WrappedComponent /* : ComponentType */) {
+    var withDisplayName = 'withCSS(' + String(getDisplayName(WrappedComponent)) + ')';
+
+    var Wrapper = function (_React$Component) {
         _inherits(Wrapper, _React$Component);
 
         function Wrapper(props) {
@@ -2045,6 +2055,7 @@ var withCSS = function withCSS(WrappedComponent /* : ComponentType */) {
             key: 'css',
             value: function () {
                 function css(context /* : StyleContext */) {
+                    // Avoid a circular import
                     var _require = require('./index'),
                         css = _require.css;
 
@@ -2085,7 +2096,12 @@ var withCSS = function withCSS(WrappedComponent /* : ComponentType */) {
 
         return Wrapper;
     }(react.Component);
-};
+
+    Wrapper.displayName = withDisplayName;
+    Wrapper.WrappedComponent = WrappedComponent;
+
+    return hoistNonReactStatics(Wrapper, WrappedComponent, {});
+}
 
 var CSSProvider = CSSContext.Provider;
 

@@ -25,9 +25,6 @@ export function withCSS (WrappedComponent /* : ComponentType */) {
     const withDisplayName = `withCSS(${getDisplayName(WrappedComponent)})`;
 
     class Wrapper extends React.Component {
-        static displayName = withDisplayName;
-        static WrappedComponent = WrappedComponent;
-
         constructor (props) {
             super(props);
             this.renderContext = this.renderContext.bind(this);
@@ -55,6 +52,9 @@ export function withCSS (WrappedComponent /* : ComponentType */) {
             return <WrappedComponent {...this.props} css={this.css(context)} />
         }
     }
+
+    Wrapper.displayName = withDisplayName
+    Wrapper.WrappedComponent = WrappedComponent
 
     return hoistNonReactStatics(Wrapper, WrappedComponent, {});
 }
