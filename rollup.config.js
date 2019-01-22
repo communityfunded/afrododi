@@ -33,7 +33,7 @@ function distBuild(options) {
     };
 }
 
-const externals = new Set(Object.keys(pkg.dependencies));
+const externals = new Set(Object.keys(pkg.dependencies).concat(Object.keys(pkg.peerDependencies)));
 
 function standardBuilds() {
     return {

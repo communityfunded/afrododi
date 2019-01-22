@@ -3,6 +3,7 @@ import {hashString} from './util';
 import {
     injectAndGetClassName,
     startBuffering,
+    createContext,
     flushToString,
     flushToStyleTag,
     addRenderedClassNames,
@@ -61,7 +62,7 @@ const StyleSheet = {
         return mappedSheetDefinition;
     },
 
-    startBuffering,
+    createContext,
 
     rehydrate(context /* : StyleContext */, renderedClassNames /* : string[] */ =[]) {
         addRenderedClassNames(context, renderedClassNames);
@@ -188,6 +189,7 @@ export default function makeExports(
         },
 
         css(context /* : StyleContext */, ...styleDefinitions /* : MaybeSheetDefinition[] */) {
+            console.log(`>- css context ->`, context)
             if (!context || !context.hasOwnProperty('injectionBuffer')) {
                 throw new Error('The css() function was called without a StyleContext instance. Consider using the withCSS() higher-order component instead.')
             }

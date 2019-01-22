@@ -181,7 +181,7 @@ const injectGeneratedCSSOnce = (context /* : StyleContext */, key, generatedCSS)
         // If we're not already buffering, schedule a call to flush the
         // current styles.
         context.isBuffering = true;
-        asap(flushToStyleTag);
+        asap(() => flushToStyleTag(context));
     }
 
     context.injectionBuffer.push(...generatedCSS);

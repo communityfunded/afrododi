@@ -62,7 +62,10 @@ export interface StyleSheetStatic {
         styles: T
     ): {[K in keyof T]: StyleDeclarationValue };
 
-    startBuffering(): StyleContext;
+    /**
+     * Create a context for the CSSProvider
+     */
+    createContext(): StyleContext;
 
     /**
      * Rehydrate class names from server renderer

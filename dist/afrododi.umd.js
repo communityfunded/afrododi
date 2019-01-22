@@ -1773,7 +1773,9 @@
           // If we're not already buffering, schedule a call to flush the
           // current styles.
           context.isBuffering = true;
-          browserAsap(flushToStyleTag);
+          browserAsap(function () {
+              return flushToStyleTag(context);
+          });
       }
 
       (_context$injectionBuf = context.injectionBuffer).push.apply(_context$injectionBuf, _toConsumableArray$1(generatedCSS));
@@ -2288,7 +2290,7 @@
       }(),
 
 
-      startBuffering: startBuffering,
+      createContext: createContext,
 
       rehydrate: function () {
           function rehydrate(context /* : StyleContext */) {
@@ -2415,6 +2417,7 @@
           }(),
           css: function () {
               function css(context /* : StyleContext */) /* : MaybeSheetDefinition[] */{
+                  console.log('>- css context ->', context);
                   if (!context || !context.hasOwnProperty('injectionBuffer')) {
                       throw new Error('The css() function was called without a StyleContext instance. Consider using the withCSS() higher-order component instead.');
                   }
