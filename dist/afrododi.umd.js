@@ -2417,7 +2417,6 @@
           }(),
           css: function () {
               function css(context /* : StyleContext */) /* : MaybeSheetDefinition[] */{
-                  console.log('>- css context ->', context);
                   if (!context || !context.hasOwnProperty('injectionBuffer')) {
                       throw new Error('The css() function was called without a StyleContext instance. Consider using the withCSS() higher-order component instead.');
                   }
