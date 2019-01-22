@@ -188,7 +188,7 @@ export default function makeExports(
         },
 
         css(context /* : StyleContext */, ...styleDefinitions /* : MaybeSheetDefinition[] */) {
-            if (!context.hasOwnProperty('injectionBuffer')) {
+            if (!context || !context.hasOwnProperty('injectionBuffer')) {
                 throw new Error('The css() function was called without a StyleContext instance. Consider using the withCSS() higher-order component instead.')
             }
 
